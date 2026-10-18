@@ -1,0 +1,21 @@
+id: doddle.social.social-hooks
+version: 0.1.0
+kind: skill
+engine: doddle-os>=1.0
+description: "Write and measure the first line that earns the scroll-stop"
+inputs:
+  - {name: platform, type: string, required: true, description: "Target platform slug"}
+  - {name: brief, type: string, required: true, description: "The idea and the one promise the hook must land"}
+  - {name: format, type: string, required: false, description: "video / carousel / single image"}
+  - {name: tone, type: string, required: false, description: "Voice guidance"}
+outputs:
+  - {name: hooks, type: markdown, description: "The validated hook options, ranked"}
+  - {name: envelope, type: json, description: "The dsocial validate-post envelope"}
+tools:
+  - {id: doddle.tool.cli.dsocial, required: true, fallback: manual_review}
+integrations: []
+nodes:
+  - {id: draft, type: agent, ref: content-producer, needs: [inputs], produces: [draft]}
+  - {id: validate, type: tool, ref: doddle.tool.cli.dsocial, needs: [draft], produces: [envelope]}
+  - {id: narrate, type: agent, ref: content-producer, needs: [validate], produces: [hooks]}
+on_fail: {retry: 1, fallback: manual_review}

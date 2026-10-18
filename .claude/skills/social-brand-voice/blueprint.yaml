@@ -1,0 +1,17 @@
+id: doddle.social.social-brand-voice
+version: 0.1.0
+kind: skill
+engine: doddle-os>=1.0
+description: "Define a social brand voice and tone guide with do and don't examples, advisory only"
+inputs:
+  - {name: brand, type: string, required: true, description: "Brand name and positioning source"}
+  - {name: audience, type: string, required: false, description: "Who the voice speaks to"}
+  - {name: examples, type: file, required: false, description: "Sample posts, ads or guidelines to extract voice from"}
+  - {name: platforms, type: string, required: false, description: "Platforms the voice must cover"}
+outputs:
+  - {name: voice_guide, type: markdown, description: "Voice attributes, tone by context, do and don't examples and lexicon"}
+tools: []
+integrations: []
+nodes:
+  - {id: draft, type: agent, ref: content-producer, needs: [inputs], produces: [voice_guide]}
+on_fail: {retry: 1, fallback: manual_review}

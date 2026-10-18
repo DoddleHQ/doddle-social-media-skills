@@ -1,0 +1,24 @@
+id: doddle.social.social-content-calendar
+version: 0.1.0
+kind: skill
+engine: doddle-os>=1.0
+description: "Build a dated social content calendar skeleton and fill every slot with an idea"
+inputs:
+  - {name: start_date, type: string, required: true, description: "Calendar start date (YYYY-MM-DD)"}
+  - {name: weeks, type: integer, required: true, description: "Horizon in weeks"}
+  - {name: platforms, type: string, required: true, description: "One or more slug:cadence pairs (cadence 1-7)"}
+  - {name: pillars, type: string, required: false, description: "Comma-separated pillar names for round-robin rotation"}
+outputs:
+  - {name: calendar, type: markdown, description: "The dated calendar with an idea filled into every slot"}
+  - {name: envelope, type: json, description: "The dsocial calendar envelope"}
+tools:
+  - {id: doddle.tool.cli.dsocial, required: true, fallback: manual_review}
+  - {id: doddle.tool.v1.buffer.profiles, required: false, fallback: manual_review}
+  - {id: doddle.tool.v1.notion.pages, required: false, fallback: manual_review}
+integrations:
+  - buffer
+  - notion
+nodes:
+  - {id: build, type: tool, ref: doddle.tool.cli.dsocial, needs: [inputs], produces: [envelope]}
+  - {id: fill, type: agent, ref: social-strategist, needs: [build], produces: [calendar]}
+on_fail: {retry: 1, fallback: manual_review}

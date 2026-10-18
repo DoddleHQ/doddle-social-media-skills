@@ -1,0 +1,26 @@
+id: doddle.social.social-paid-strategy
+version: 0.1.0
+kind: skill
+engine: doddle-os>=1.0
+description: "Plan paid social around one objective, structure, audience, creative and measurement"
+inputs:
+  - {name: objective, type: string, required: true, description: "The single campaign objective"}
+  - {name: platforms, type: string, required: false, description: "Platforms in scope"}
+  - {name: budget, type: string, required: false, description: "Stated total budget or range"}
+  - {name: audience, type: string, required: false, description: "Target audience description"}
+outputs:
+  - {name: report, type: markdown, description: "Objective-led paid social plan"}
+  - {name: envelope, type: json, description: "The dsocial specs envelope"}
+tools:
+  - {id: doddle.tool.cli.dsocial, required: true, fallback: manual_review}
+  - {id: doddle.tool.v1.meta.ads, required: false, fallback: manual_review}
+  - {id: doddle.tool.v1.tiktok.ads, required: false, fallback: manual_review}
+  - {id: doddle.tool.v1.linkedin.ads, required: false, fallback: manual_review}
+integrations:
+  - meta
+  - tiktok
+  - linkedin
+nodes:
+  - {id: spec, type: tool, ref: doddle.tool.cli.dsocial, needs: [inputs], produces: [envelope]}
+  - {id: plan, type: agent, ref: paid-social-strategist, needs: [spec], produces: [report]}
+on_fail: {retry: 1, fallback: manual_review}

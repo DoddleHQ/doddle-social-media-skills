@@ -1,0 +1,33 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install pytest
+        run: python -m pip install --upgrade pip pytest
+      - name: Lint pack (structure, frontmatter, blueprints, links, secrets, claims)
+        run: python scripts/lint_pack.py
+      - name: Run tests
+        run: python -m pytest tests -q
+      - name: Smoke-test the toolkit
+        run: |
+          python scripts/dsocial version
+          python scripts/dsocial specs --platform instagram > /dev/null
+          python scripts/dsocial validate-post linkedin --text "A short announcement. #launch" --json > /dev/null
+          python scripts/dsocial hashtags --platform instagram --text "one #two #three" --json > /dev/null
+          python scripts/dsocial calendar --start 2026-11-02 --weeks 2 --platform instagram:3 --json > /dev/null
+          python scripts/dsocial audit tests/fixtures/posts.json --json > /dev/null

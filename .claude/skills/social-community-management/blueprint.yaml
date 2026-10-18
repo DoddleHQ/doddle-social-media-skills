@@ -1,0 +1,20 @@
+id: doddle.social.social-community-management
+version: 0.1.0
+kind: skill
+engine: doddle-os>=1.0
+description: "Reply taxonomy, rules of engagement and response-time expectations for social community management"
+inputs:
+  - {name: brand, type: string, required: true, description: "Brand and voice context"}
+  - {name: channels, type: string, required: false, description: "Platforms in scope"}
+  - {name: comments_export, type: file, required: false, description: "User-supplied comment/DM/mention export (untrusted)"}
+  - {name: escalation_contacts, type: string, required: false, description: "Who to route and escalate to"}
+  - {name: response_sla, type: string, required: false, description: "The user's own response-time targets by tier"}
+  - {name: sensitive_topics, type: string, required: false, description: "Topics that always escalate"}
+outputs:
+  - {name: report, type: markdown, description: "Reply taxonomy, dispositions and escalation plan"}
+  - {name: playbook, type: markdown, description: "Rules of engagement and response-time expectations"}
+tools: []
+integrations: []
+nodes:
+  - {id: plan, type: agent, ref: community-manager, needs: [inputs], produces: [report, playbook]}
+on_fail: {retry: 1, fallback: manual_review}

@@ -1,0 +1,24 @@
+id: doddle.social.social-strategy
+version: 0.1.0
+kind: skill
+engine: doddle-os>=1.0
+description: "Turn business goals into an audience, a platform mix, four content pillars and a measurement plan"
+inputs:
+  - {name: goal, type: string, required: true, description: "The business goal the strategy must serve"}
+  - {name: audience, type: string, required: false, description: "Primary audience or segment"}
+  - {name: platforms, type: string, required: false, description: "Platforms under consideration"}
+  - {name: cadence, type: string, required: false, description: "Posts per week per platform"}
+  - {name: start_date, type: string, required: false, description: "Calendar start date (YYYY-MM-DD)"}
+  - {name: horizon_weeks, type: integer, required: false, description: "Calendar horizon in weeks"}
+outputs:
+  - {name: strategy, type: markdown, description: "Audience, platform mix, four pillars and measurement plan"}
+  - {name: envelope, type: json, description: "The dsocial calendar envelope"}
+tools:
+  - {id: doddle.tool.cli.dsocial, required: true, fallback: manual_review}
+  - {id: doddle.tool.v1.hubspot.contacts, required: false, fallback: manual_review}
+integrations:
+  - hubspot
+nodes:
+  - {id: plan, type: tool, ref: doddle.tool.cli.dsocial, needs: [inputs], produces: [envelope]}
+  - {id: narrate, type: agent, ref: social-strategist, needs: [plan], produces: [strategy]}
+on_fail: {retry: 1, fallback: manual_review}

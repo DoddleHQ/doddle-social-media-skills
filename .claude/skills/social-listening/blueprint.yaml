@@ -1,0 +1,21 @@
+id: doddle.social.social-listening
+version: 0.1.0
+kind: skill
+engine: doddle-os>=1.0
+description: "Define listening queries and separate monitoring observation from measurement, inventing no count"
+inputs:
+  - {name: brand, type: string, required: true, description: "Brand and product terms"}
+  - {name: keywords, type: string, required: true, description: "Core keywords and hashtags"}
+  - {name: competitors, type: string, required: false, description: "Rival handles and brand terms"}
+  - {name: channels, type: string, required: false, description: "Platforms to listen on"}
+  - {name: window, type: string, required: false, description: "The time window that bounds any count"}
+  - {name: data_source, type: file, required: false, description: "User-supplied listening export (untrusted)"}
+  - {name: goals, type: string, required: false, description: "What the listening is for"}
+outputs:
+  - {name: report, type: markdown, description: "Observation-versus-measurement findings"}
+  - {name: queries, type: markdown, description: "The listening query library"}
+tools: []
+integrations: []
+nodes:
+  - {id: plan, type: agent, ref: community-manager, needs: [inputs], produces: [report, queries]}
+on_fail: {retry: 1, fallback: manual_review}

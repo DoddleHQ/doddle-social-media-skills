@@ -1,0 +1,14 @@
+[
+  {"posted_at": "2026-09-01", "platform": "instagram", "media_type": "reel", "has_alt_text": true,
+   "text": "Three ways to warm up a cold audience this week. Which one are you trying first? #marketing #growth", "impressions": 12000, "likes": 540, "comments": 41, "shares": 22, "saves": 88},
+  {"posted_at": "2026-09-03", "platform": "instagram", "media_type": "carousel", "has_alt_text": false,
+   "text": "Our biggest launch yet is here. Swipe to see what changed. #launch", "impressions": 8000, "likes": 210, "comments": 12, "shares": 5, "saves": 30},
+  {"posted_at": "2026-09-07", "platform": "linkedin", "media_type": "text", "has_alt_text": null,
+   "text": "We analyzed 500 campaigns and found a repeatable pattern. Here it is, in one post. What would you add?", "impressions": 20000, "likes": 610, "comments": 88, "shares": 40, "saves": 15},
+  {"posted_at": "2026-09-09", "platform": "tiktok", "media_type": "video", "has_alt_text": false,
+   "text": "the hook everyone scrolls past (and how to fix it) #tiktoktips #marketing", "impressions": 45000, "likes": 3100, "comments": 210, "shares": 640, "saves": 900},
+  {"posted_at": "2026-09-15", "platform": "instagram", "media_type": "image", "has_alt_text": true,
+   "text": "Save this checklist before your next campaign. #marketing #checklist #growth #teams #social", "impressions": 6000, "likes": 180, "comments": 9, "shares": 3, "saves": 44},
+  {"posted_at": "2026-09-21", "platform": "linkedin", "media_type": "document", "has_alt_text": null,
+   "text": "A short thread on positioning. #brand", "impressions": 15000, "likes": 300, "comments": 25, "shares": 18, "saves": 10}
+]

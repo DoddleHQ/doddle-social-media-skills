@@ -1,0 +1,21 @@
+id: doddle.social.social-captions
+version: 0.1.0
+kind: skill
+engine: doddle-os>=1.0
+description: "Write and validate social captions for a target platform against its limits"
+inputs:
+  - {name: platform, type: string, required: true, description: "Target platform slug"}
+  - {name: brief, type: string, required: true, description: "What to promote and the goal"}
+  - {name: tone, type: string, required: false, description: "Voice guidance"}
+  - {name: has_media, type: bool, required: false, description: "Whether the post carries media"}
+outputs:
+  - {name: captions, type: markdown, description: "The validated caption(s)"}
+  - {name: envelope, type: json, description: "The dsocial validate-post envelope"}
+tools:
+  - {id: doddle.tool.cli.dsocial, required: true, fallback: manual_review}
+integrations: []
+nodes:
+  - {id: draft, type: agent, ref: content-producer, needs: [inputs], produces: [draft]}
+  - {id: validate, type: tool, ref: doddle.tool.cli.dsocial, needs: [draft], produces: [envelope]}
+  - {id: narrate, type: agent, ref: content-producer, needs: [validate], produces: [captions]}
+on_fail: {retry: 1, fallback: manual_review}

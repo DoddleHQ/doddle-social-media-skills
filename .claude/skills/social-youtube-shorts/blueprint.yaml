@@ -1,0 +1,21 @@
+id: doddle.social.social-youtube-shorts
+version: 0.1.0
+kind: skill
+engine: doddle-os>=1.0
+description: "Adapt and validate YouTube Shorts: vertical creative, title, description and hashtags"
+inputs:
+  - {name: topic, type: string, required: true, description: "The idea or asset to adapt"}
+  - {name: format, type: string, required: false, description: "short / clip"}
+  - {name: goal, type: string, required: false, description: "What the Short should achieve"}
+outputs:
+  - {name: report, type: markdown, description: "The Shorts-ready plan and validated title/description"}
+  - {name: envelope, type: json, description: "The dsocial validate-post envelope"}
+tools:
+  - {id: doddle.tool.cli.dsocial, required: true, fallback: manual_review}
+  - {id: doddle.tool.v1.canva.design, required: false, fallback: manual_review}
+integrations:
+  - canva
+nodes:
+  - {id: spec, type: tool, ref: doddle.tool.cli.dsocial, needs: [inputs], produces: [envelope]}
+  - {id: narrate, type: agent, ref: platform-specialist, needs: [spec], produces: [report]}
+on_fail: {retry: 1, fallback: manual_review}

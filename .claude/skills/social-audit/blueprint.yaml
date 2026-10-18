@@ -1,0 +1,20 @@
+id: doddle.social.social-audit
+version: 0.1.0
+kind: skill
+engine: doddle-os>=1.0
+description: "Audit a social account from a post export: cadence, compliance, hashtag fit, alt-text coverage and engagement"
+inputs:
+  - {name: export, type: file, required: true, description: "Post export (JSON array/object or CSV)"}
+  - {name: account, type: string, required: false, description: "Account handle the export belongs to"}
+outputs:
+  - {name: report, type: markdown, description: "Ranked, sequenced social audit"}
+  - {name: envelope, type: json, description: "The dsocial audit envelope"}
+tools:
+  - {id: doddle.tool.cli.dsocial, required: true, fallback: manual_review}
+  - {id: doddle.tool.v1.ga4.getReport, required: false, fallback: manual_review}
+integrations:
+  - google-analytics
+nodes:
+  - {id: run, type: tool, ref: doddle.tool.cli.dsocial, needs: [inputs], produces: [envelope]}
+  - {id: narrate, type: agent, ref: social-strategist, needs: [run], produces: [report]}
+on_fail: {retry: 1, fallback: manual_review}

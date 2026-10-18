@@ -1,0 +1,64 @@
+{
+  "name": "doddle-social-media-skills",
+  "version": "0.1.0",
+  "description": "Doddle Social Media OS — 30 skills and 5 agents for social media marketing (strategy, content, platform playbooks, community, influencer, paid social, measurement). Deterministic Python toolkit computes evidence; skills narrate and prioritize. Hybrid format: agent-agnostic SKILL.md + DoddleOS blueprints.",
+  "author": {
+    "name": "Doddle Team",
+    "url": "https://doddlehq.com"
+  },
+  "homepage": "https://doddlehq.com",
+  "repository": "https://github.com/DoddleHQ/doddle-social-media-skills",
+  "documentation": "https://docs.doddlehq.com",
+  "license": "MIT",
+  "keywords": [
+    "social-media",
+    "social-media-marketing",
+    "content-calendar",
+    "instagram",
+    "linkedin",
+    "tiktok",
+    "x",
+    "youtube-shorts",
+    "pinterest",
+    "paid-social",
+    "influencer",
+    "marketing"
+  ],
+  "category": "marketing",
+  "tags": [
+    "social-media",
+    "content",
+    "paid-social",
+    "community"
+  ],
+  "skills": "./.claude/skills",
+  "agents": "./.claude/agents",
+  "main": "README.md",
+  "components": {
+    "skills": {
+      "path": "./.claude/skills",
+      "count": 30,
+      "ids": "doddle.social.*"
+    },
+    "agents": {
+      "path": "./.claude/agents",
+      "count": 5,
+      "list": [
+        "social-strategist",
+        "platform-specialist",
+        "content-producer",
+        "community-manager",
+        "paid-social-strategist"
+      ]
+    },
+    "toolkit": {
+      "path": "./scripts/doddle_social",
+      "cli": "dsocial",
+      "python": ">=3.9",
+      "dependencies": "stdlib-only"
+    }
+  },
+  "requirements": {
+    "doddleOS": ">=2.0"
+  }
+}

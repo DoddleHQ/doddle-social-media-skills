@@ -1,0 +1,22 @@
+id: doddle.social.social-hashtags
+version: 0.1.0
+kind: skill
+engine: doddle-os>=1.0
+description: "Build a hashtag set within the platform cap and starting range"
+inputs:
+  - {name: platform, type: string, required: true, description: "Target platform slug"}
+  - {name: caption, type: string, required: true, description: "The caption or topic the tags accompany"}
+  - {name: goal, type: string, required: false, description: "Reach, discovery or community focus"}
+  - {name: brand_tags, type: string, required: false, description: "Owned or campaign tags to include"}
+outputs:
+  - {name: hashtag_set, type: markdown, description: "The final, deduped tag set within cap and range"}
+  - {name: envelope, type: json, description: "The dsocial hashtags envelope"}
+tools:
+  - {id: doddle.tool.cli.dsocial, required: true, fallback: manual_review}
+integrations: []
+nodes:
+  - {id: draft, type: agent, ref: content-producer, needs: [inputs], produces: [draft]}
+  - {id: spec, type: tool, ref: doddle.tool.cli.dsocial, needs: [inputs], produces: [spec]}
+  - {id: count, type: tool, ref: doddle.tool.cli.dsocial, needs: [draft, spec], produces: [envelope]}
+  - {id: narrate, type: agent, ref: content-producer, needs: [count], produces: [hashtag_set]}
+on_fail: {retry: 1, fallback: manual_review}

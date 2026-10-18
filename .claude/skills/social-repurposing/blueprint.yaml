@@ -1,0 +1,24 @@
+id: doddle.social.social-repurposing
+version: 0.1.0
+kind: skill
+engine: doddle-os>=1.0
+description: "Atomise one long-form asset into platform-native posts adapted to each platform's registry limits"
+inputs:
+  - {name: asset, type: file, required: true, description: "The long-form source to atomise"}
+  - {name: source_platform, type: string, required: false, description: "Where the asset currently lives"}
+  - {name: target_platforms, type: string, required: true, description: "Comma-separated platform slugs to produce for"}
+  - {name: goal, type: string, required: false, description: "The campaign objective"}
+  - {name: tone, type: string, required: false, description: "Voice guidance"}
+outputs:
+  - {name: report, type: markdown, description: "Platform-native post set with the ratio and limit each was built to"}
+  - {name: envelope, type: json, description: "The dsocial specs / validate-post envelope"}
+tools:
+  - {id: doddle.tool.cli.dsocial, required: true, fallback: manual_review}
+  - {id: doddle.tool.v1.canva.design, required: false, fallback: manual_review}
+integrations:
+  - canva
+nodes:
+  - {id: adapt, type: agent, ref: content-producer, needs: [inputs], produces: [draft]}
+  - {id: validate, type: tool, ref: doddle.tool.cli.dsocial, needs: [adapt], produces: [envelope]}
+  - {id: narrate, type: agent, ref: content-producer, needs: [validate], produces: [report]}
+on_fail: {retry: 1, fallback: manual_review}

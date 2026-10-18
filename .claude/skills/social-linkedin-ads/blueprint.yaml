@@ -1,0 +1,24 @@
+id: doddle.social.social-linkedin-ads
+version: 0.1.0
+kind: skill
+engine: doddle-os>=1.0
+description: "Build LinkedIn B2B ad campaigns and read live performance with caveats"
+inputs:
+  - {name: objective, type: string, required: true, description: "The single campaign objective"}
+  - {name: audience, type: string, required: false, description: "Target audience or segments"}
+  - {name: budget, type: string, required: false, description: "Stated budget or range"}
+  - {name: creative, type: string, required: false, description: "Existing creative or its direction"}
+outputs:
+  - {name: report, type: markdown, description: "LinkedIn B2B ad plan and honest read"}
+  - {name: envelope, type: json, description: "The dsocial specs envelope"}
+  - {name: campaign_metrics, type: json, description: "Live LinkedIn account metrics, or NOT AVAILABLE"}
+tools:
+  - {id: doddle.tool.cli.dsocial, required: true, fallback: manual_review}
+  - {id: doddle.tool.v1.linkedin.ads, required: false, fallback: manual_review}
+integrations:
+  - linkedin
+nodes:
+  - {id: spec, type: tool, ref: doddle.tool.cli.dsocial, needs: [inputs], produces: [envelope]}
+  - {id: read, type: tool, ref: doddle.tool.v1.linkedin.ads, needs: [spec], produces: [campaign_metrics]}
+  - {id: narrate, type: agent, ref: paid-social-strategist, needs: [read], produces: [report]}
+on_fail: {retry: 1, fallback: manual_review}

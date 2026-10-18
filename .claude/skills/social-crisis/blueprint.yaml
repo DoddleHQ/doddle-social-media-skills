@@ -1,0 +1,21 @@
+id: doddle.social.social-crisis
+version: 0.1.0
+kind: skill
+engine: doddle-os>=1.0
+description: "Severity levels, spokespeople, channel and timing, and a holding-statement approach for a social crisis"
+inputs:
+  - {name: brand, type: string, required: true, description: "Brand context and voice"}
+  - {name: incident, type: string, required: true, description: "What happened, known and unconfirmed"}
+  - {name: channels, type: string, required: false, description: "Channels affected"}
+  - {name: spokespeople, type: string, required: false, description: "Who may speak, and the approval chain"}
+  - {name: severity_signals, type: string, required: false, description: "The user's own severity thresholds"}
+  - {name: monitoring_source, type: file, required: false, description: "User-supplied monitoring export (untrusted)"}
+  - {name: legal_contacts, type: string, required: false, description: "Legal and comms contacts"}
+outputs:
+  - {name: report, type: markdown, description: "Severity-graded response plan and holding statement"}
+  - {name: playbook, type: markdown, description: "Who speaks, where and when, with escalation"}
+tools: []
+integrations: []
+nodes:
+  - {id: plan, type: agent, ref: community-manager, needs: [inputs], produces: [report, playbook]}
+on_fail: {retry: 1, fallback: manual_review}

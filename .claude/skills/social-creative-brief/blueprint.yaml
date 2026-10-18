@@ -1,0 +1,22 @@
+id: doddle.social.social-creative-brief
+version: 0.1.0
+kind: skill
+engine: doddle-os>=1.0
+description: "Brief a designer or videographer with registry-quoted ratio, duration and hook"
+inputs:
+  - {name: platform, type: string, required: true, description: "Target platform slug (or one per deliverable)"}
+  - {name: deliverable, type: string, required: true, description: "What is being made (Reel, carousel, still, Short)"}
+  - {name: message, type: string, required: true, description: "The single message the piece must land"}
+  - {name: hook, type: string, required: false, description: "The first line or opening shot"}
+  - {name: brand, type: string, required: false, description: "Brand kit or asset references"}
+outputs:
+  - {name: brief, type: markdown, description: "The creative brief with registry-quoted specs"}
+  - {name: envelope, type: json, description: "The dsocial specs envelope"}
+tools:
+  - {id: doddle.tool.cli.dsocial, required: true, fallback: manual_review}
+integrations: []
+nodes:
+  - {id: draft, type: agent, ref: content-producer, needs: [inputs], produces: [draft]}
+  - {id: spec, type: tool, ref: doddle.tool.cli.dsocial, needs: [draft], produces: [envelope]}
+  - {id: narrate, type: agent, ref: content-producer, needs: [spec], produces: [brief]}
+on_fail: {retry: 1, fallback: manual_review}

@@ -1,0 +1,19 @@
+id: doddle.social.social-seo
+version: 0.1.0
+kind: skill
+engine: doddle-os>=1.0
+description: "Make social content discoverable through search: keyworded profiles, Pinterest/YouTube search and hashtag queries"
+inputs:
+  - {name: platform, type: string, required: true, description: "Target platform slug"}
+  - {name: topic, type: string, required: true, description: "Account, product or theme to be found"}
+  - {name: keywords, type: string, required: false, description: "Terms the audience is known to use"}
+outputs:
+  - {name: report, type: markdown, description: "Discovery plan with registry limits and advisory keywords"}
+  - {name: envelope, type: json, description: "The dsocial specs envelope"}
+tools:
+  - {id: doddle.tool.cli.dsocial, required: true, fallback: manual_review}
+integrations: []
+nodes:
+  - {id: spec, type: tool, ref: doddle.tool.cli.dsocial, needs: [inputs], produces: [envelope]}
+  - {id: narrate, type: agent, ref: platform-specialist, needs: [spec], produces: [report]}
+on_fail: {retry: 1, fallback: manual_review}

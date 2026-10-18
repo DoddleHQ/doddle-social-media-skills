@@ -1,0 +1,20 @@
+id: doddle.social.social-ugc
+version: 0.1.0
+kind: skill
+engine: doddle-os>=1.0
+description: "Source, brief, rights-clear and reuse user-generated content without inventing a metric"
+inputs:
+  - {name: brand, type: string, required: true, description: "Brand and product context"}
+  - {name: goal, type: string, required: true, description: "What the UGC should achieve"}
+  - {name: source_channels, type: string, required: false, description: "Where to look for candidates (user-provided)"}
+  - {name: candidates, type: file, required: false, description: "User-supplied UGC links, screenshots or shortlist"}
+  - {name: reuse_terms, type: string, required: false, description: "Agreed usage scope, duration and credit"}
+  - {name: audience, type: string, required: false, description: "Segment from the CRM or the user"}
+outputs:
+  - {name: report, type: markdown, description: "UGC plan with rights status per item"}
+  - {name: brief, type: markdown, description: "Creator permission and usage brief"}
+tools: []
+integrations: []
+nodes:
+  - {id: plan, type: agent, ref: content-producer, needs: [inputs], produces: [report, brief]}
+on_fail: {retry: 1, fallback: manual_review}

@@ -1,0 +1,21 @@
+id: doddle.social.social-linkedin
+version: 0.1.0
+kind: skill
+engine: doddle-os>=1.0
+description: "Adapt and validate content for LinkedIn posts, articles and document carousels"
+inputs:
+  - {name: topic, type: string, required: true, description: "The idea or asset to adapt"}
+  - {name: format, type: string, required: false, description: "text / article / document"}
+  - {name: goal, type: string, required: false, description: "What the post should achieve"}
+outputs:
+  - {name: report, type: markdown, description: "The LinkedIn-ready plan and validated post"}
+  - {name: envelope, type: json, description: "The dsocial validate-post envelope"}
+tools:
+  - {id: doddle.tool.cli.dsocial, required: true, fallback: manual_review}
+  - {id: doddle.tool.v1.canva.design, required: false, fallback: manual_review}
+integrations:
+  - canva
+nodes:
+  - {id: spec, type: tool, ref: doddle.tool.cli.dsocial, needs: [inputs], produces: [envelope]}
+  - {id: narrate, type: agent, ref: platform-specialist, needs: [spec], produces: [report]}
+on_fail: {retry: 1, fallback: manual_review}

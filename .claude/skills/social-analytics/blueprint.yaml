@@ -1,0 +1,21 @@
+id: doddle.social.social-analytics
+version: 0.1.0
+kind: skill
+engine: doddle-os>=1.0
+description: "Explain the audit signals from a post export and what each does and does not prove"
+inputs:
+  - {name: export, type: file, required: true, description: "Post export (JSON array/object or CSV)"}
+  - {name: account, type: string, required: false, description: "Handle the export belongs to"}
+  - {name: window, type: string, required: false, description: "Human label for the period"}
+outputs:
+  - {name: report, type: markdown, description: "Signal-by-signal explanation with claims and limits"}
+  - {name: envelope, type: json, description: "The dsocial audit envelope"}
+tools:
+  - {id: doddle.tool.cli.dsocial, required: true, fallback: manual_review}
+  - {id: doddle.tool.v1.ga4.getReport, required: false, fallback: manual_review}
+integrations:
+  - google-analytics
+nodes:
+  - {id: run, type: tool, ref: doddle.tool.cli.dsocial, needs: [inputs], produces: [envelope]}
+  - {id: narrate, type: agent, ref: social-strategist, needs: [run], produces: [report]}
+on_fail: {retry: 1, fallback: manual_review}

@@ -1,0 +1,19 @@
+id: doddle.social.social-compliance
+version: 0.1.0
+kind: skill
+engine: doddle-os>=1.0
+description: "Review social content for disclosure, accessibility, claim and platform-policy safety (advisory)"
+inputs:
+  - {name: content, type: string, required: true, description: "Caption, script, brief or on-screen text to review"}
+  - {name: platform, type: string, required: true, description: "Target platform slug"}
+  - {name: relationship, type: string, required: false, description: "organic / paid / paid-partnership"}
+  - {name: jurisdiction, type: string, required: false, description: "Market whose advertising rules apply"}
+  - {name: claims, type: string, required: false, description: "The specific statements to substantiate"}
+outputs:
+  - {name: report, type: markdown, description: "Findings with severity and the reviewer question"}
+  - {name: checklist, type: markdown, description: "Disclosure, accessibility, claim and policy checklist"}
+tools: []
+integrations: []
+nodes:
+  - {id: review, type: agent, ref: community-manager, needs: [inputs], produces: [report, checklist]}
+on_fail: {retry: 1, fallback: manual_review}

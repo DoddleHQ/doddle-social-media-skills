@@ -1,0 +1,40 @@
+{
+  "name": "doddle-social-media-skills",
+  "version": "0.1.0",
+  "description": "Doddle Social Media OS — 30 skills for social strategy, content, platform playbooks, community, influencer and paid social, with a deterministic zero-dependency evidence toolkit.",
+  "main": "README.md",
+  "scripts": {
+    "test": "python3 -m pytest tests -q",
+    "lint": "python3 scripts/lint_pack.py",
+    "demo": "python3 scripts/dsocial validate-post instagram --text \"Your caption here. #social\" --json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DoddleHQ/doddle-social-media-skills.git"
+  },
+  "keywords": [
+    "social-media",
+    "social-media-marketing",
+    "content-calendar",
+    "instagram",
+    "linkedin",
+    "tiktok",
+    "youtube-shorts",
+    "paid-social",
+    "influencer",
+    "marketing"
+  ],
+  "author": "Doddle Team <contact@doddlehq.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DoddleHQ/doddle-social-media-skills/issues"
+  },
+  "homepage": "https://doddlehq.com",
+  "files": [
+    ".claude/",
+    ".claude-plugin/",
+    "scripts/",
+    "README.md",
+    "LICENSE"
+  ]
+}

@@ -1,0 +1,21 @@
+id: doddle.social.social-influencer
+version: 0.1.0
+kind: skill
+engine: doddle-os>=1.0
+description: "Select creators and write briefs, deliverables and disclosure guidance"
+inputs:
+  - {name: brief, type: string, required: true, description: "Campaign goal, product and market"}
+  - {name: platform, type: string, required: false, description: "Primary platform slug"}
+  - {name: budget, type: string, required: false, description: "Stated budget or range, if any"}
+  - {name: audience, type: string, required: false, description: "Target audience description"}
+outputs:
+  - {name: report, type: markdown, description: "Creator selection approach and rationale"}
+  - {name: creator_brief, type: markdown, description: "Brief for each selected creator"}
+  - {name: disclosure_checklist, type: markdown, description: "Disclosure and compliance checklist"}
+tools: []
+integrations: []
+nodes:
+  - {id: select, type: agent, ref: social-strategist, needs: [inputs], produces: [report]}
+  - {id: write_brief, type: agent, ref: social-strategist, needs: [select], produces: [creator_brief]}
+  - {id: disclose, type: agent, ref: social-strategist, needs: [write_brief], produces: [disclosure_checklist]}
+on_fail: {retry: 1, fallback: manual_review}

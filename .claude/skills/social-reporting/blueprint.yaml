@@ -1,0 +1,22 @@
+id: doddle.social.social-reporting
+version: 0.1.0
+kind: skill
+engine: doddle-os>=1.0
+description: "Turn a social insights export into a client-ready report with named windows and comparison bases"
+inputs:
+  - {name: export, type: file, required: true, description: "Post export (JSON array/object or CSV)"}
+  - {name: window, type: string, required: true, description: "Reporting window, e.g. 2026-07-01 to 2026-09-30"}
+  - {name: comparison, type: string, required: false, description: "Comparison base, e.g. prior 90 days"}
+  - {name: client, type: string, required: false, description: "Client or account name for the header"}
+outputs:
+  - {name: report, type: markdown, description: "Client-ready social report with window and base"}
+  - {name: envelope, type: json, description: "The dsocial report envelope"}
+tools:
+  - {id: doddle.tool.cli.dsocial, required: true, fallback: manual_review}
+  - {id: doddle.tool.v1.ga4.getReport, required: false, fallback: manual_review}
+integrations:
+  - google-analytics
+nodes:
+  - {id: run, type: tool, ref: doddle.tool.cli.dsocial, needs: [inputs], produces: [envelope]}
+  - {id: narrate, type: agent, ref: social-strategist, needs: [run], produces: [report]}
+on_fail: {retry: 1, fallback: manual_review}

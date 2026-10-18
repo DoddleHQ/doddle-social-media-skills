@@ -1,0 +1,20 @@
+id: doddle.social.social-employee-advocacy
+version: 0.1.0
+kind: skill
+engine: doddle-os>=1.0
+description: "Design an employee advocacy program with guidelines and a content bank"
+inputs:
+  - {name: company, type: string, required: true, description: "Company and what it sells"}
+  - {name: goals, type: string, required: false, description: "Advocacy goals (hiring, trust, reach)"}
+  - {name: channels, type: string, required: false, description: "Allowed platforms"}
+outputs:
+  - {name: report, type: markdown, description: "Advocacy program design and rollout"}
+  - {name: guidelines, type: markdown, description: "Participation and disclosure guidelines"}
+  - {name: content_bank, type: markdown, description: "Seed posts and prompts employees can adapt"}
+tools: []
+integrations: []
+nodes:
+  - {id: design, type: agent, ref: content-producer, needs: [inputs], produces: [report]}
+  - {id: write_guidelines, type: agent, ref: content-producer, needs: [design], produces: [guidelines]}
+  - {id: bank, type: agent, ref: content-producer, needs: [write_guidelines], produces: [content_bank]}
+on_fail: {retry: 1, fallback: manual_review}

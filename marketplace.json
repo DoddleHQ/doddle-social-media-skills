@@ -1,0 +1,42 @@
+{
+  "name": "doddle-social-media-skills",
+  "owner": {
+    "name": "Doddle Team",
+    "email": "contact@doddlehq.com",
+    "url": "https://doddlehq.com"
+  },
+  "metadata": {
+    "description": "Doddle Social Media OS — 30 independent skills for social media marketing, backed by a deterministic evidence toolkit",
+    "version": "0.1.0",
+    "updatedAt": "2026-10-18"
+  },
+  "plugins": [
+    {
+      "name": "doddle-social-media-skills",
+      "source": "./",
+      "description": "Doddle Social Media OS: 30 skills (strategy, content, platform playbooks, community, influencer, paid social, measurement) with a deterministic CLI. Skills narrate; the toolkit computes every number from recorded evidence and the versioned platform-spec registry.",
+      "author": {
+        "name": "Doddle Team"
+      },
+      "homepage": "https://doddlehq.com",
+      "repository": "https://github.com/DoddleHQ/doddle-social-media-skills",
+      "documentation": "https://docs.doddlehq.com",
+      "license": "MIT",
+      "keywords": [
+        "social-media",
+        "social-media-marketing",
+        "content-calendar",
+        "paid-social",
+        "influencer"
+      ],
+      "category": "marketing",
+      "tags": [
+        "social-media",
+        "content",
+        "paid-social"
+      ],
+      "featured": true,
+      "verified": true
+    }
+  ]
+}

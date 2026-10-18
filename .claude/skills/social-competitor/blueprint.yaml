@@ -1,0 +1,19 @@
+id: doddle.social.social-competitor
+version: 0.1.0
+kind: skill
+engine: doddle-os>=1.0
+description: "Benchmark a social account against named competitors from provided exports, never estimating"
+inputs:
+  - {name: export, type: file, required: true, description: "One post export per account (JSON/CSV)"}
+  - {name: competitors, type: string, required: false, description: "Names or handles of the benchmark set"}
+  - {name: account, type: string, required: false, description: "Your own account handle, if included in the export"}
+outputs:
+  - {name: report, type: markdown, description: "Ranked competitor benchmark on measured signals"}
+  - {name: envelope, type: json, description: "The dsocial audit envelope"}
+tools:
+  - {id: doddle.tool.cli.dsocial, required: true, fallback: manual_review}
+integrations: []
+nodes:
+  - {id: run, type: tool, ref: doddle.tool.cli.dsocial, needs: [inputs], produces: [envelope]}
+  - {id: narrate, type: agent, ref: social-strategist, needs: [run], produces: [report]}
+on_fail: {retry: 1, fallback: manual_review}
